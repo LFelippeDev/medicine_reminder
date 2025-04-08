@@ -1,6 +1,6 @@
 require('dotenv').config();
 
-const { Client } = require('whatsapp-web.js');
+const { Client, LocalAuth } = require('whatsapp-web.js');
 const qrcode = require('qrcode-terminal');
 const { schedule } = require('node-cron');
 const dayjs = require('dayjs');
@@ -70,7 +70,15 @@ const formatDate = () => {
     ? `${years}, ${months} e ${days}`
     : parts.join(' e ');
 };
-const client = new Client();
+
+const client = new Client({
+  authStrategy: new LocalAuth({
+    clientId: 'medicine_reminder',
+  }),
+  puppeteer: {
+    args: ['--no-sandbox', '--disable-setuid-sandbox'],
+  },
+});
 
 client.once('ready', () => {
   console.log('Client is ready!');
