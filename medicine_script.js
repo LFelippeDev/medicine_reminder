@@ -72,9 +72,7 @@ const formatDate = () => {
 };
 
 const client = new Client({
-  authStrategy: new LocalAuth({
-    clientId: 'medicine_reminder',
-  }),
+  authStrategy: new LocalAuth(),
   puppeteer: {
     args: ['--no-sandbox', '--disable-setuid-sandbox'],
   },
@@ -82,6 +80,8 @@ const client = new Client({
 
 client.once('ready', () => {
   console.log('Client is ready!');
+
+  client.sendMessage(FELIPPE_NUMBER, 'Você já tomou seu remédio hoje? 🍼❌');
 
   schedule('0 18 * * *', () => {
     client.sendMessage(VICK_NUMBER, 'Você já tomou seu remédio hoje? 🍼❌');
@@ -104,6 +104,11 @@ client.on('message_create', (message) => {
       message.from,
       `Felippe e Vitória tem ${formatDate()} de namoro! ❤️`
     );
+});
+
+client.on('qr', (qr) => {
+  console.log('This is your QR code:', qr);
+  qrcode.generate(qr, { small: true });
 });
 
 client.initialize();
