@@ -94,7 +94,8 @@ client.once('ready', () => {
 });
 
 client.on('message_create', (message) => {
-  if (message.body === 'ping') client.sendMessage(message.from, 'pong');
+  if (message.body.toLocaleLowerCase() === 'ping')
+    client.sendMessage(message.from, 'pong');
   if (
     message.body.toLowerCase().includes('tempo de namoro') &&
     (message.from === VICK_NUMBER || message.to === FELIPPE_NUMBER)
@@ -103,11 +104,6 @@ client.on('message_create', (message) => {
       message.from,
       `Felippe e Vitória tem ${formatDate()} de namoro! ❤️`
     );
-});
-
-client.on('qr', (qr) => {
-  console.log('This is your QR code:', qr);
-  qrcode.generate(qr, { small: true });
 });
 
 client.initialize();
